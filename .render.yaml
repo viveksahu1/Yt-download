@@ -1,8 +1,0 @@
-services:
-  - type: web
-    name: yt-download
-    env: node
-    buildCommand: npm install
-    startCommand: npm start
-    branch: main
-    plan: free

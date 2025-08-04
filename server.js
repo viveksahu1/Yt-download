@@ -2,13 +2,13 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const app = express();
+const port = 3000;
 const cors = require('cors');
 app.use(express.json());
 app.use(cors());
+app.use(express.static(__dirname));
 
-const port = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname, 'public')));
 
 const { spawn } = require('child_process');
 
@@ -19,9 +19,7 @@ app.post('/prepare', (req, res) => {
 
   console.log(`Starting download: ${videoUrl}`);
 
-  const ytdlpPath = './bin/yt-dlp';
-  const cookiePath = path.join(__dirname, 'cookies.txt');
-  const ytdlp = spawn(ytdlpPath, ['-f', 'b', '--cookies', cookiePath,'-o', filepath, videoUrl]);
+  const ytdlp = spawn('yt-dlp', ['-f', 'b', '-o', filepath, videoUrl]);
 
   ytdlp.stdout.on('data', (data) => {
     console.log(`[yt-dlp stdout]: ${data}`);
