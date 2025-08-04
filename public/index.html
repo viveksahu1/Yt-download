@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YouTube Video Downloader</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; text-align: center; }
+    input, button { padding: 10px; width: 60%; margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <h2>YouTube Video Downloader</h2>
+  <input type="text" id="videoUrl" placeholder="Enter YouTube Video URL">
+  <br>
+  <button onclick="downloadVideo()">Download Video</button>
+  <p id="status"></p>
+
+  <script>
+        function downloadVideo() {
+            const url = document.getElementById('videoUrl').value;
+            document.getElementById('status').innerText = "Preparing download...";
+
+            fetch('prepare', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url })
+            })
+            .then(res => res.json())
+            .then(data => {
+            if (data) {
+                console.log(data)
+                document.getElementById('status').innerText = "Downloading...";
+                // 🔽 Trigger file download in browser
+                const link = document.createElement('a');
+                link.href = `download?file=${encodeURIComponent(data.file)}`;
+                link.download = data.file;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+            } else {
+                document.getElementById('status').innerText = "Download failed.";
+            }
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById('status').innerText = "Request error.";
+            });
+        }
+  </script>
+</body>
+</html>
