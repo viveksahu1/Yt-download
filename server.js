@@ -19,7 +19,8 @@ app.post('/prepare', (req, res) => {
 
   console.log(`Starting download: ${videoUrl}`);
 
-  const ytdlp = spawn('yt-dlp', ['-f', 'b', '-o', filepath, videoUrl]);
+  const ytdlpPath = './bin/yt-dlp';
+  const ytdlp = spawn(ytdlpPath, ['-f', 'b', '-o', filepath, videoUrl]);
 
   ytdlp.stdout.on('data', (data) => {
     console.log(`[yt-dlp stdout]: ${data}`);
