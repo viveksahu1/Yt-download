@@ -20,7 +20,8 @@ app.post('/prepare', (req, res) => {
   console.log(`Starting download: ${videoUrl}`);
 
   const ytdlpPath = './bin/yt-dlp';
-  const ytdlp = spawn(ytdlpPath, ['-f', 'b', '-o', filepath, videoUrl]);
+  const cookiePath = path.join(__dirname, 'cookies.txt');
+  const ytdlp = spawn(ytdlpPath, ['-f', 'b', '--cookies', cookiePath,'-o', filepath, videoUrl]);
 
   ytdlp.stdout.on('data', (data) => {
     console.log(`[yt-dlp stdout]: ${data}`);
